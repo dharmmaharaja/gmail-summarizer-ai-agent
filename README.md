@@ -1,102 +1,70 @@
+# Gmail Summarizer AI Agent
 
-📧 Gmail Summarizer AI Agent 🎙️
-A Python-based tool that reads your unread Gmail messages, summarizes them using LLM models (e.g., Ollama Mistral), and then speaks the summary as an audio file (.mp3) using gTTS.
+This project fetches unread Gmail messages, summarizes them using an AI model, and optionally converts the summary to speech.
 
-🔥 Features
-✅ Authenticates with Gmail using OAuth 2.0
+## Features
 
-📩 Fetches recent unread emails from your Primary inbox
+- ✅ Authenticates with Gmail via OAuth2
+- 📩 Fetches recent unread emails from the Primary category
+- 🧹 Cleans and trims email bodies (removes URLs, formats text)
+- 🧠 Summarizes emails using a local Ollama model (`mistral:latest`)
+- 🔊 Converts summary to MP3 audio using Google Text-to-Speech (gTTS)
+- 🪵 Logs key steps with timestamps
 
-🧠 Summarizes emails using local LLM (e.g., Mistral via Ollama)
+## Setup
 
-🔊 Converts the summary to speech using Google Text-to-Speech
+1. **Clone this repo**  
+   ```bash
+   git clone https://github.com/dharmmaharaja/gmail-summarizer-ai-agent.git
+   cd gmail-summarizer-ai-agent
+   ```
 
-📁 Outputs an .mp3 file you can play on your mobile/laptop
+2. **Create virtual environment and install dependencies**  
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-🧱 Tech Stack
-Python 3.8+
+3. **Place credentials**  
+   - Download `credentials.json` from Google Cloud Console.
+   - Place it in the project root.
 
-Google Gmail API
+4. **Install Ollama and pull model**  
+   ```bash
+   ollama pull mistral
+   ```
 
-Ollama – local LLMs like Mistral
+## Usage
 
-gTTS – Text-to-speech
-
-OpenAI (optional / commented)
-
-📦 Installation
-Clone the repo
-
-bash
-Copy
-Edit
-git clone https://github.com/dharmmaharaja/gmail-summarizer-ai-agent.git
-cd gmail-summarizer-ai-agent
-Install dependencies
-
-bash
-Copy
-Edit
-pip install -r requirements.txt
-Setup Gmail API
-
-Download credentials.json from Google Developer Console
-
-Save it in the project root.
-
-First run will open a browser to authorize access.
-
-Run Ollama with Mistral
-
-bash
-Copy
-Edit
-ollama run mistral
-🚀 Usage
-bash
-Copy
-Edit
+```bash
 python gmail-summrizer.py
+```
+
 This will:
+- Fetch emails
+- Summarize them using `mistral` via Ollama API on `localhost:11434`
+- Save the summary to `summary.mp3`
 
-Fetch your unread primary emails from the past 5 days
+## Dependencies
 
-Summarize them using mistral:latest model via Ollama
+- `google-api-python-client`
+- `google-auth-oauthlib`
+- `requests`
+- `gtts`
+- `openai`
 
-Save a speech audio as summary.mp3 in the current folder
+Install with:
 
-🔧 Configuration
-Gmail query: You can adjust query = "is:unread newer_than:5d category:primary" for your use case
+```bash
+pip install -r requirements.txt
+```
 
-Summarizer model: Replace "mistral:latest" with any Ollama-supported model
+## Notes
 
-Speech output length: Limited to 5000 characters
+- The summarization model must be running locally via Ollama.
+- The `.gitignore` should exclude `venv/` and `token.pkl`.
 
-🎧 Playing MP3 on Mobile
-To listen on your phone:
+## License
 
-Use Google Drive, Dropbox, or AirDrop to transfer summary.mp3
-
-Or automate syncing with a cloud folder
-
-🛡️ Security
-Tokens are stored in token.pkl locally.
-
-Do not expose your credentials.json or api_key in public repos.
-
-🧠 Prompt Customization
-Change the summarization prompt in summarize_emails_ollama() for better results:
-
-python
-Copy
-Edit
-"Please summarize these email messages as clear, concise bullet points..."
-🧪 Example Output
-pgsql
-Copy
-Edit
-📩 Fetched 10 unread emails
-✅ Summary generated
-🔊 MP3 saved as summary.mp3
-📄 License
-MIT License – Free to use and modify.
+This project uses open-source dependencies, each under their respective licenses.
