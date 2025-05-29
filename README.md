@@ -1,13 +1,9 @@
-Here's your **organized, detailed, and copy-ready `README.md`**, perfect for GitHub or sharing:
 
----
-
-````markdown
 # 📬 Gmail Summarizer AI Agent
 
 This project fetches unread Gmail messages, summarizes them using a local AI model via Ollama, and optionally converts the summary to an MP3 audio file using Google Text-to-Speech (gTTS).
 
----
+
 
 ## 🚀 Features
 
