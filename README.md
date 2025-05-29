@@ -30,7 +30,7 @@ Clone the repo
 bash
 Copy
 Edit
-git clone https://github.com/yourname/gmail-summarizer-ai-agent.git
+git clone https://github.com/dharmmaharaja/gmail-summarizer-ai-agent.git
 cd gmail-summarizer-ai-agent
 Install dependencies
 
