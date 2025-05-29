@@ -1,0 +1,15 @@
+# Python virtual environment
+venv/
+
+# Bytecode files
+__pycache__/
+*.py[cod]
+
+# Editor-specific
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
+token.pkl
