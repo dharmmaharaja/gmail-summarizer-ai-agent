@@ -182,7 +182,25 @@ def speak_text(texts):
 
 
     tts = gTTS(text=cleaned_text, lang='en')
-    tts.save("summary.mp3")  # use 'afplay' for Mac, 'mpg123' for Linux
+    tts.save("static/summary.mp3")  # use 'afplay' for Mac, 'mpg123' for Linux
+
+import platform
+import subprocess
+
+def play_audio(file_path="static/summary.mp3"):
+    system = platform.system()
+    if system == "Darwin":  # macOS
+        subprocess.run(["afplay", file_path])
+    elif system == "Linux":
+        subprocess.run(["mpg123", file_path])
+    elif system == "Windows":
+        os.startfile(file_path)
+    else:
+        print("Cannot play audio automatically on this OS.")
+
+def save_summary_text(summary_text):
+    with open("static/last_summary.txt", "w", encoding="utf-8") as f:
+        f.write(summary_text.strip())
 
 if __name__ == "__main__":
     emails = get_unread_emails()
@@ -191,3 +209,4 @@ if __name__ == "__main__":
     summary = summarize_emails_ollama(emails)
     logging.info(f"Summary:{summary}")
     speak_text(summary)
+    play_audio()

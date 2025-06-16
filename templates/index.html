@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Email Summarizer</title>
+<style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; }
+    button { padding: 10px 20px; margin: 10px 10px 10px 0; font-size: 16px; cursor: pointer; }
+    #summary { margin-top: 20px; white-space: pre-wrap; background: #f4f4f4; padding: 15px; border-radius: 5px; min-height: 120px; }
+    audio { width: 100%; margin-top: 20px; outline: none; }
+    .loading { opacity: 0.6; pointer-events: none; }
+</style>
+</head>
+<body>
+    <h1>Email Summarizer</h1>
+    <button id="getSummaryBtn">Get Summary & Play</button>
+    <button id="playLastBtn">Play Last Summary</button>
+
+    <div id="summary">Summary will appear here...</div>
+    <audio id="audioPlayer" controls></audio>
+
+<script>
+const getSummaryBtn = document.getElementById('getSummaryBtn');
+const playLastBtn = document.getElementById('playLastBtn');
+const summaryDiv = document.getElementById('summary');
+const audioPlayer = document.getElementById('audioPlayer');
+
+function setLoading(isLoading) {
+    if(isLoading) {
+        getSummaryBtn.classList.add('loading');
+        getSummaryBtn.textContent = 'Loading...';
+        playLastBtn.disabled = true;
+    } else {
+        getSummaryBtn.classList.remove('loading');
+        getSummaryBtn.textContent = 'Get Summary & Play';
+        playLastBtn.disabled = false;
+    }
+}
+
+getSummaryBtn.onclick = async () => {
+    setLoading(true);
+    summaryDiv.textContent = 'Fetching and summarizing emails...';
+    try {
+        const res = await fetch('/api/summarize');
+        const data = await res.json();
+        if(data.success) {
+            summaryDiv.textContent = data.summary || 'No summary available.';
+            audioPlayer.src = '/static/summary.mp3?cache=' + Date.now();
+            audioPlayer.play();
+        } else {
+            summaryDiv.textContent = 'Error: ' + (data.error || 'Unknown error');
+        }
+    } catch(e) {
+        summaryDiv.textContent = 'Error: ' + e.message;
+    }
+    setLoading(false);
+};
+
+playLastBtn.onclick = () => {
+    audioPlayer.src = '/static/summary.mp3?cache=' + Date.now();
+    audioPlayer.play();
+};
+
+window.onload = function() {
+    fetch('/api/last-summary')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('summary').textContent = data.summary;
+                document.getElementById('audio-player').src = '/static/summary.mp3';
+            }
+        });
+};
+</script>
+</body>
+</html>
